@@ -143,6 +143,9 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
+    const isValidString = this.validate(puzzleString);
+    if (!isValidString) return null;
+
     const puzzle = puzzleString.split('');
     let solvedCount = 0;
 
