@@ -5,7 +5,7 @@ class SudokuSolver {
   }
 
   validate(puzzleString) {
-    const regex = /[^.0-9]/;
+    const regex = /[^.1-9]/;
     const notString = typeof puzzleString !== 'string';
 
     if (notString) return false;
