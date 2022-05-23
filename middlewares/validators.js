@@ -3,7 +3,7 @@ module.exports = {
     return function (req, res, next) {
       for (const field of fields) {
         if (!(field in req.body)) {
-          res.send('missing required field ' + field);
+          res.send({ error: 'Required field missing' });
           return;
         }
       }
@@ -17,15 +17,17 @@ module.exports = {
     // test if string contains charcters that are not "." or 1-9
     const regex = /[^.0-9]/;
 
-    const containsInvalidCharacters = regex.test(puzzle);
     const hasMissingCharacters =
       typeof puzzle === 'string' && puzzle.length !== 81;
 
-    const isInvalidPuzzleString =
-      containsInvalidCharacters || hasMissingCharacters;
+    if (hasMissingCharacters) {
+      return res.json({ error: 'Expected puzzle to be 81 characters long' });
+    }
 
-    if (isInvalidPuzzleString) {
-      res.send('invalid puzzle string');
+    const containsInvalidCharacters = regex.test(puzzle);
+
+    if (containsInvalidCharacters) {
+      res.send({ error: 'Invalid characters in puzzle' });
       return;
     }
 
