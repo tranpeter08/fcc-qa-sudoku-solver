@@ -129,9 +129,9 @@ suite('Functional Tests', () => {
 
   test('Check a puzzle placement with multiple placement conflicts: POST request to /api/check', (done) => {
     const [puzzleString, answer] = puzzles[0];
-    const coord = 'e6';
-    const value = 6;
-    const conflicts = ['row', 'column'];
+    const coord = 'a2';
+    const value = 1;
+    const conflicts = ['row', 'region'];
 
     chai
       .request(server)
