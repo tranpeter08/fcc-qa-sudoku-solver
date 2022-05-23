@@ -87,13 +87,10 @@ class SudokuSolver {
 
   checkRegionPlacement(puzzleString, row, column, value) {
     const columnIndex = parseInt(column);
-    const regionColumnIndex = this.getRegionIndex(columnIndex);
     const rowIndex = parseInt(row);
-    const regionRowIndex = this.getRegionIndex(rowIndex);
-    const puzzleIndex = columnIndex + 9 * rowIndex;
-    const coordinateValue = puzzleString[puzzleIndex];
 
-    if (coordinateValue === value.toString()) return true;
+    const regionColumnIndex = this.getRegionIndex(columnIndex);
+    const regionRowIndex = this.getRegionIndex(rowIndex);
 
     let startIndex = 3 * regionColumnIndex + 27 * regionRowIndex;
     let entires = '';
@@ -110,6 +107,13 @@ class SudokuSolver {
   }
 
   isValidCellValue(puzzle, row, column, value) {
+    const columnIndex = parseInt(column);
+    const rowIndex = parseInt(row);
+    const puzzleIndex = columnIndex + 9 * rowIndex;
+    const coordinateValue = puzzle[puzzleIndex];
+
+    if (coordinateValue === value.toString()) return { valid: true };
+
     const validators = [
       ['checkColPlacement', 'column'],
       ['checkRowPlacement', 'row'],
