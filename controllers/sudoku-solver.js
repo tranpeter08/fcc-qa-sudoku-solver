@@ -137,12 +137,13 @@ class SudokuSolver {
 
     // if the number cells that have been solved equals the number of cells
     // the puzzle has been solved
-    if (solvedCount === puzzle.length) return puzzle.join('');
+    if (solvedCount === puzzle.length) return { solution: puzzle.join('') };
 
     // reset index if out of bounds
     // if there were no solutions found after a cycle, the board could not be solved
     if (index === puzzle.length) {
-      if (hasFoundSolution === false) return null;
+      if (hasFoundSolution === false)
+        return { error: 'Puzzle cannot be solved' };
       index = 0;
       solutionExist = false;
     }
@@ -179,7 +180,7 @@ class SudokuSolver {
 
   solve(puzzleString) {
     const isValidString = this.validate(puzzleString);
-    if (!isValidString) return null;
+    if (!isValidString) return { error: 'not valid puzzle string' };
 
     const puzzle = puzzleString.split('');
     let solvedCount = 0;
@@ -192,6 +193,7 @@ class SudokuSolver {
     });
 
     const result = this.solveCell(puzzle, solvedCount);
+
     return result;
   }
 }
