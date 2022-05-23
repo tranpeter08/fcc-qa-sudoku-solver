@@ -43,7 +43,7 @@ class SudokuSolver {
     const [row, column] = coord.split('');
 
     return {
-      rowIndex: this.rows.indexOf(row),
+      rowIndex: this.rows.indexOf(row.toLowerCase()),
       columnIndex: parseInt(column) - 1,
     };
   }

@@ -25,6 +25,7 @@ module.exports = function (app) {
       validateCoords,
       validateValue,
       (req, res) => {
+        console.log(req.body);
         const { puzzle, coordinate, value } = req.body;
         const { columnIndex, rowIndex } = solver.getIndexes(coordinate);
 
