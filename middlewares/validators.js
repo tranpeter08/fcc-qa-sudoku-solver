@@ -3,7 +3,12 @@ module.exports = {
     return function (req, res, next) {
       for (const field of fields) {
         if (!(field in req.body)) {
-          res.send({ error: 'Required field missing' });
+          if (fields.length === 1) {
+            res.send({ error: 'Required field missing' });
+          } else {
+            res.send({ error: 'Required field(s) missing' });
+          }
+
           return;
         }
       }
