@@ -21,7 +21,25 @@ class SudokuSolver {
     return true;
   }
 
+  validateCoord(coord) {
+    const regex = /^[a-i][1-9]$/i;
+    const isString = typeof coord === 'string';
+
+    if (isString) {
+      const hasValidChars = regex.test(coord);
+      if (hasValidChars) {
+        return true;
+      }
+    }
+
+    false;
+  }
+
   getIndexes(coord) {
+    const isValidCoord = this.validateCoord(coord);
+
+    if (!isValidCoord) throw 'Invalid Coord';
+
     const [row, column] = coord.split('');
 
     return {
@@ -31,6 +49,11 @@ class SudokuSolver {
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
+    const regex = /^[0-9]$/i;
+    const validRow = regex.test(row.toString());
+
+    if (!validRow) return false;
+
     const rowIndex = parseInt(row);
     const start = 0 + 9 * rowIndex;
     const end = 9 + 9 * rowIndex;
@@ -42,6 +65,11 @@ class SudokuSolver {
   }
 
   checkColPlacement(puzzleString, row, column, value) {
+    const regex = /^[0-9]$/i;
+    const validColumn = regex.test(column.toString());
+
+    if (!validColumn) return false;
+
     let columnIndex = parseInt(column);
     let columnEntries = '';
 
@@ -104,14 +132,19 @@ class SudokuSolver {
     };
   }
 
-  solveCell(puzzle, solvedCount, index = 0) {
+  solveCell(puzzle, solvedCount, index = 0, hasFoundSolution = false) {
+    let solutionExist = hasFoundSolution;
+
     // if the number cells that have been solved equals the number of cells
     // the puzzle has been solved
     if (solvedCount === puzzle.length) return puzzle.join('');
 
     // reset index if out of bounds
+    // if there were no solutions found after a cycle, the board could not be solved
     if (index === puzzle.length) {
+      if (hasFoundSolution === false) return null;
       index = 0;
+      solutionExist = false;
     }
 
     const value = puzzle[index];
@@ -121,7 +154,7 @@ class SudokuSolver {
 
     // if the cell already has a number skip to the next cell
     if (value !== '.') {
-      return this.solveCell(puzzle, solvedCount, index + 1);
+      return this.solveCell(puzzle, solvedCount, index + 1, solutionExist);
     }
 
     // figure out possible solutions for the cell with constraints
@@ -137,9 +170,11 @@ class SudokuSolver {
     if (solutions.length === 1) {
       puzzle[index] = solutions[0];
       solvedCount++;
+
+      solutionExist = true;
     }
 
-    return this.solveCell(puzzle, solvedCount, index + 1);
+    return this.solveCell(puzzle, solvedCount, index + 1, solutionExist);
   }
 
   solve(puzzleString) {
