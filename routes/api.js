@@ -47,8 +47,12 @@ module.exports = function (app) {
     .route('/api/solve')
     .post(requiredFields(), validatePuzzleString, (req, res) => {
       const { puzzle } = req.body;
-      const solution = solver.solve(puzzle);
+      const result = solver.solve(puzzle);
 
-      res.json({ solution });
+      if (result.error) {
+        return res.json({ error: result.error });
+      }
+
+      res.json({ solution: result.solution });
     });
 };
